@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Photo not available">
+  <rect width="400" height="300" fill="#EEF6EA"/>
+  <path d="M0 232 Q120 208 200 226 T400 214 V300 H0Z" fill="#DCEED3"/>
+  <g transform="translate(200 132)">
+    <path d="M-62 -6 L0 -62 L62 -6" fill="none" stroke="#D80B05" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M-40 -14 V44 H40 V-14" fill="none" stroke="#0C7409" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="-11" y="12" width="22" height="32" rx="4" fill="#0C7409"/>
+  </g>
+  <text x="200" y="262" text-anchor="middle" font-family="Poppins, system-ui, sans-serif" font-size="15" font-weight="500" fill="#5B7A5A">Photo coming soon</text>
+</svg>

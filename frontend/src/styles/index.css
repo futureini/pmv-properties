@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: #F1F5EF;
+  color: #14261A;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Centers the app like a phone frame on tablet/desktop, full-width on mobile */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(10,61,20,0.08);
+}
+
+@media (min-width: 481px) {
+  body { background: #E3EBDF; }
+  .app-shell { min-height: 100vh; }
+}
+
+.page-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 84px; /* space for bottom nav */
+}
+
+/* Full-bleed, fully responsive splash screen. Uses dynamic viewport height
+   (100dvh) so mobile browser address-bar chrome never leaves a white gap
+   at the bottom, with a 100vh fallback for older browsers. Pinned with
+   position:fixed so it always fills the real device screen regardless of
+   document scroll position or height. */
+.splash-shell {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* smooth page transition */
+.page-fade {
+  animation: fadeSlideUp 0.28s ease both;
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tap-scale {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.tap-scale:active {
+  transform: scale(0.96);
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #c5d3c0; border-radius: 10px; }
+
+/* Visible keyboard focus everywhere, in the brand red */
+:focus-visible {
+  outline: 2px solid #D80B05;
+  outline-offset: 2px;
+}
+
+/* Ad banner carousel (see components/HeroSlider.jsx).
+   Each slide is a fixed, compact width (never wider than 300px) so the banner
+   stays small on phones AND on desktop, with the next banner peeking in at
+   the edge to show it can be swiped. The end spacer lets the last slide
+   snap to the same left edge as the others. */
+.hero-slide {
+  width: min(300px, 76%);
+}
+.hero-spacer-start {
+  width: 16px;
+}
+.hero-spacer-end {
+  width: calc(100% - min(300px, 76%) - 16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
