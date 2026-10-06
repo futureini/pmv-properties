@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/sitemap-properties.xml", "destination": "https://pmv-properties.onrender.com/api/sitemap-properties.xml" },
     { "source": "/((?!.*\\.[a-zA-Z0-9]+$).*)", "destination": "/index.html" }
   ]
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Splash from './pages/Splash.jsx';
+import SplashGate from './components/SplashGate.jsx';
 import ServerWakeNotice from './components/ServerWakeNotice.jsx';
 import Home from './pages/Home.jsx';
 import AllProperties from './pages/AllProperties.jsx';
@@ -18,11 +18,12 @@ import AdminEnquiries from './pages/admin/AdminEnquiries.jsx';
 export default function App() {
   return (
     <>
+    <SplashGate />
     <ServerWakeNotice />
     <Routes>
       {/* Customer side (mobile-first) */}
-      <Route path="/" element={<Splash />} />
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Navigate to="/" replace />} />
       <Route path="/properties" element={<AllProperties />} />
       <Route path="/category/:slug" element={<CategoryListing />} />
       <Route path="/property/:id" element={<PropertyDetails />} />

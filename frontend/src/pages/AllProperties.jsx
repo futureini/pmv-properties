@@ -74,11 +74,11 @@ export default function AllProperties() {
   return (
     <div className="app-shell">
       <Helmet>
-        <title>Properties | PMV Properties</title>
-        <meta name="description" content="Browse every property listed with PMV Properties, across all categories." />
+        <title>All Properties in Ponnamaravathi & Pudukkottai | PMV Properties</title>
+        <meta name="description" content="Browse all houses, flats, land plots and commercial properties for sale, rent and lease in Ponnamaravathi, Pudukkottai and nearby areas." />
         <link rel="canonical" href={canonicalUrl('/properties')} />
-        <meta property="og:title" content="Properties | PMV Properties" />
-        <meta property="og:description" content="Browse every property listed with PMV Properties, across all categories." />
+        <meta property="og:title" content="All Properties in Ponnamaravathi & Pudukkottai | PMV Properties" />
+        <meta property="og:description" content="Browse all houses, flats, land plots and commercial properties for sale, rent and lease in Ponnamaravathi, Pudukkottai and nearby areas." />
         <meta property="og:url" content={canonicalUrl('/properties')} />
         <meta property="og:image" content={DEFAULT_OG_IMAGE} />
       </Helmet>

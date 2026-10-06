@@ -1,19 +1,11 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import splashBg from '../assets/splash-bg.jpeg';
 
-// Splash screen only (screen 1). Onboarding/Welcome screen (screen 2)
-// has been removed per spec — splash goes straight to Home.
-// The background photo already has the "PMV Properties" branding baked in,
-// so no separate logo image is overlaid here.
+// The splash screen visual (photo already has the "PMV Properties" branding
+// baked in). It no longer navigates anywhere: <SplashGate> in App.jsx shows it
+// as a short overlay the first time someone opens ANY page of the site in a
+// browser session, then reveals the page underneath at the same URL.
 export default function Splash() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const t = setTimeout(() => navigate('/home', { replace: true }), 1600);
-    return () => clearTimeout(t);
-  }, [navigate]);
-
   return (
     <div
       className="splash-shell flex flex-col items-center justify-end text-white bg-brand-dark bg-cover bg-center bg-no-repeat"

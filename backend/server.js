@@ -15,6 +15,7 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const enquiryRoutes = require('./routes/enquiryRoutes');
+const seoRoutes = require('./routes/seoRoutes');
 
 const app = express();
 
@@ -75,6 +76,7 @@ app.use(
 );
 app.use('/api/properties', propertyRoutes);
 app.use('/api/enquiries', enquiryRoutes);
+app.use('/api', seoRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

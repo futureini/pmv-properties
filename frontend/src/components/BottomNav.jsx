@@ -7,7 +7,7 @@ import iconEnquiry from '../assets/icons/nav/nav-enquiry.png';
 import iconAdmin from '../assets/icons/nav/nav-admin.png';
 
 const items = [
-  { to: '/home', label: 'Home', icon: iconHome, end: true },
+  { to: '/', label: 'Home', icon: iconHome, end: true },
   { to: '/properties', label: 'Properties', icon: iconProperties },
   { to: '/post-property', label: 'Post Property', icon: iconPostProperty },
   { to: '/need-property', label: 'Enquiry', icon: iconEnquiry },

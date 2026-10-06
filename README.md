@@ -93,3 +93,15 @@ Render's free plan puts the API to sleep after ~15 minutes without visitors, and
 3. Make sure `VITE_API_BASE_URL` is set on Vercel to `https://<your-api>.onrender.com/api`.
 
 For zero cold starts guaranteed, upgrade the Render service to a paid instance type — then none of the above is needed.
+
+## Getting found on Google (Ponnamaravathi / Pudukkottai)
+
+Done in code: location-rich titles and descriptions on every page, a real homepage at `/` (splash shows as a first-visit overlay), structured data (RealEstateAgent + WebSite, and a listing block on each property page), a sitemap index (`/sitemap.xml` → `sitemap-pages.xml` + `sitemap-properties.xml`, the latter generated live from the database by `GET /api/sitemap-properties.xml` through the rewrite in `frontend/vercel.json`).
+
+Still to do outside the code (this is what moves rankings):
+
+1. **Google Search Console** → add `https://pmvproperty.in`, verify, submit `https://pmvproperty.in/sitemap.xml`, then "URL Inspection → Request indexing" for `/`, `/category/rent`, `/category/buy-sale`, `/category/land-plot`.
+2. **Google Business Profile** (free) for PMV Properties in Ponnamaravathi: same name, phone and website everywhere. This is the biggest factor for local searches and the map pack.
+3. Keep the UptimeRobot monitor running so Googlebot never hits a sleeping server.
+4. Add real listings regularly, with clear titles and descriptions that name the town (e.g. "2 BHK House for Rent in Ponnamaravathi").
+5. Get links to the site: your Facebook page, WhatsApp Business profile, Instagram/YouTube bio, local directories.

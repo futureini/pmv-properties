@@ -9,7 +9,7 @@ import Loader from '../components/Loader.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { cachedGet } from '../api.js';
 import { CATEGORY_MAP } from '../utils/categories.js';
-import { canonicalUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
+import { canonicalUrl, DEFAULT_OG_IMAGE, CATEGORY_SEO } from '../utils/seo.js';
 
 // Quick "type" filter chips shown per category (matches the mockup's
 // House / Flat / Land / Shop / Commercial sub-tabs on each listing page).
@@ -62,14 +62,19 @@ export default function CategoryListing() {
     );
   }
 
+  const seo = CATEGORY_SEO[slug] || {
+    title: `${category.label} Properties in Ponnamaravathi | PMV Properties`,
+    description: `Browse ${category.label} properties in Ponnamaravathi and Pudukkottai with PMV Properties.`,
+  };
+
   return (
     <div className="app-shell">
       <Helmet>
-        <title>{category.label} Properties | PMV Properties</title>
-        <meta name="description" content={`Browse ${category.label} properties available with PMV Properties.`} />
+        <title>{seo.title}</title>
+        <meta name="description" content={seo.description} />
         <link rel="canonical" href={canonicalUrl(`/category/${slug}`)} />
-        <meta property="og:title" content={`${category.label} Properties | PMV Properties`} />
-        <meta property="og:description" content={`Browse ${category.label} properties available with PMV Properties.`} />
+        <meta property="og:title" content={seo.title} />
+        <meta property="og:description" content={seo.description} />
         <meta property="og:url" content={canonicalUrl(`/category/${slug}`)} />
         <meta property="og:image" content={DEFAULT_OG_IMAGE} />
       </Helmet>

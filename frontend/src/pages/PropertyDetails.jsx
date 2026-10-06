@@ -74,10 +74,21 @@ export default function PropertyDetails() {
   const description = property.description?.slice(0, 150) || property.title;
   const ogImage = images[0]?.url ? absoluteImageUrl(resolveImageUrl(images[0].url, 1200)) : DEFAULT_OG_IMAGE;
 
+  const listingLd = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: property.title,
+    description,
+    url: canonicalUrl(`/property/${id}`),
+    image: ogImage,
+    datePosted: property.createdAt,
+    contentLocation: { '@type': 'Place', name: property.location },
+  };
+
   return (
     <div className="app-shell">
       <Helmet>
-        <title>{property.title} | PMV Properties</title>
+        <title>{`${property.title}${property.location ? ' – ' + property.location : ''} | PMV Properties`}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalUrl(`/property/${id}`)} />
         <meta property="og:title" content={`${property.title} | PMV Properties`} />
@@ -85,6 +96,7 @@ export default function PropertyDetails() {
         <meta property="og:url" content={canonicalUrl(`/property/${id}`)} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:type" content="product" />
+        <script type="application/ld+json">{JSON.stringify(listingLd)}</script>
       </Helmet>
 
       <Header title="Property Details" showSearch={false} />

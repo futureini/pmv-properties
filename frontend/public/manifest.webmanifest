@@ -2,7 +2,7 @@
   "name": "PMV Properties",
   "short_name": "PMV Properties",
   "description": "Find your dream property in Ponnamaravathi - rent, buy, sell, land, flats and commercial spaces.",
-  "start_url": "/home",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#0C7409",

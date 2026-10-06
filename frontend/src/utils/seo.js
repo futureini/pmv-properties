@@ -22,3 +22,43 @@ export function canonicalUrl(pathname) {
 export function absoluteImageUrl(url) {
   return typeof url === 'string' && /^https?:\/\//i.test(url) ? url : DEFAULT_OG_IMAGE;
 }
+
+// Location-rich titles/descriptions for each category page (what Google shows
+// in search results). Keep the town names — people search "house for rent in
+// Ponnamaravathi", not just "house for rent".
+export const CATEGORY_SEO = {
+  'buy-sale': {
+    title: 'Houses & Property for Sale in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Browse houses, plots and property for sale in Ponnamaravathi, Pudukkottai and nearby towns. View photos and prices, then call or WhatsApp PMV Properties.',
+  },
+  rent: {
+    title: 'House for Rent in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Find houses and homes for rent in Ponnamaravathi, Pudukkottai and nearby areas. See photos, rent and location, then call or WhatsApp PMV Properties.',
+  },
+  'land-plot': {
+    title: 'Land & Plots for Sale in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Land, house plots and agricultural land for sale in Ponnamaravathi, Pudukkottai and surrounding areas. See details and contact PMV Properties.',
+  },
+  flat: {
+    title: 'Flats & Apartments in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Flats and apartments for sale or rent in Ponnamaravathi, Pudukkottai and nearby towns. Browse listings with PMV Properties.',
+  },
+  'shop-commercial': {
+    title: 'Shops & Commercial Space in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Shops, offices and commercial buildings for rent, lease or sale in Ponnamaravathi, Pudukkottai and nearby areas. Browse with PMV Properties.',
+  },
+  lease: {
+    title: 'Property for Lease in Ponnamaravathi, Pudukkottai | PMV Properties',
+    description:
+      'Houses, shops and land available for lease in Ponnamaravathi, Pudukkottai and surrounding areas. Browse lease listings with PMV Properties.',
+  },
+};
+
+export const HOME_TITLE = 'Property in Ponnamaravathi & Pudukkottai | Buy, Rent, Lease – PMV Properties';
+export const HOME_DESCRIPTION =
+  'PMV Properties: houses, flats, land plots, shops and commercial space for sale, rent and lease in Ponnamaravathi, Pudukkottai and nearby towns. Call or WhatsApp us today.';
