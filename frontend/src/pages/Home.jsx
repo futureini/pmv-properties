@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { FiSearch } from 'react-icons/fi';
 import { MdAddHome, MdManageSearch } from 'react-icons/md';
@@ -188,31 +188,6 @@ export default function Home() {
               ))}
             </div>
           )}
-        </section>
-
-        {/* Plain-text section for search engines AND visitors: who we are + where we work */}
-        <section className="px-4 mt-8 mb-4 text-[12px] leading-relaxed text-gray-600">
-          <h2 className="font-semibold text-ink text-sm mb-2">
-            Property in Ponnamaravathi, Pudukkottai &amp; nearby areas
-          </h2>
-          <p>
-            PMV Properties helps you buy, sell, rent and lease houses, flats, land plots, shops and commercial
-            spaces in Ponnamaravathi, Pudukkottai and nearby towns including Thirumayam, Aranthangi, Alangudi,
-            Karaikudi, Singampunari, Viralimalai, Illuppur and Kulathur. Call or WhatsApp us, post your property,
-            or tell us what you need.
-          </p>
-          <p className="mt-2">
-            பொன்னமராவதி, புதுக்கோட்டை மற்றும் சுற்றுவட்டாரப் பகுதிகளில் வீடு, பிளாட், நிலம் (மனை), கடை மற்றும்
-            வணிக இடங்களை விற்க, வாங்க, வாடகைக்கு மற்றும் குத்தகைக்குப் பெற PMV Properties உங்களுக்கு உதவுகிறது.
-          </p>
-          <nav aria-label="Property categories" className="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-medium text-accent">
-            <Link to="/category/rent">House for Rent</Link>
-            <Link to="/category/buy-sale">Property for Sale</Link>
-            <Link to="/category/land-plot">Land / Plots</Link>
-            <Link to="/category/flat">Flats</Link>
-            <Link to="/category/shop-commercial">Shops / Commercial</Link>
-            <Link to="/category/lease">Lease</Link>
-          </nav>
         </section>
       </div>
 
