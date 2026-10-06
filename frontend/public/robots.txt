@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://pmv-properties.vercel.app/sitemap.xml
+Sitemap: https://pmvproperty.in/sitemap.xml

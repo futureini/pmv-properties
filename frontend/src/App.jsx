@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import Splash from './pages/Splash.jsx';
+import ServerWakeNotice from './components/ServerWakeNotice.jsx';
 import Home from './pages/Home.jsx';
 import AllProperties from './pages/AllProperties.jsx';
 import CategoryListing from './pages/CategoryListing.jsx';
@@ -16,6 +17,8 @@ import AdminEnquiries from './pages/admin/AdminEnquiries.jsx';
 
 export default function App() {
   return (
+    <>
+    <ServerWakeNotice />
     <Routes>
       {/* Customer side (mobile-first) */}
       <Route path="/" element={<Splash />} />
@@ -34,5 +37,6 @@ export default function App() {
       <Route path="/admin/properties/:id/edit" element={<AdminAddEditProperty />} />
       <Route path="/admin/enquiries" element={<AdminEnquiries />} />
     </Routes>
+    </>
   );
 }

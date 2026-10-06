@@ -6,10 +6,10 @@ import Header from '../components/Header.jsx';
 import Loader from '../components/Loader.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import ContactButtons from '../components/ContactButtons.jsx';
-import api from '../api.js';
+import { cachedGet } from '../api.js';
 import SafeImage from '../components/SafeImage.jsx';
 import { formatPrice, resolveImageUrl } from '../utils/categories.js';
-import { canonicalUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
+import { canonicalUrl, absoluteImageUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
 
 // One spec row helper — skips rendering entirely when the value is empty,
 // so categories that don't have a field (e.g. bedrooms for Land) never
@@ -32,11 +32,19 @@ export default function PropertyDetails() {
 
   useEffect(() => {
     setLoading(true);
-    api
-      .get(`/properties/${id}`)
-      .then(({ data }) => setProperty(data.property))
-      .catch(() => setProperty(null))
-      .finally(() => setLoading(false));
+    let off = false;
+    cachedGet(`/properties/${id}`, {}, (data) => {
+      if (off) return;
+      setProperty(data.property);
+      setLoading(false);
+    }).catch(() => {
+      if (off) return;
+      setProperty(null);
+      setLoading(false);
+    });
+    return () => {
+      off = true;
+    };
   }, [id]);
 
   if (loading) {
@@ -64,7 +72,7 @@ export default function PropertyDetails() {
   const priceLabel = isRent ? 'Rent Amount' : property.category === 'lease' ? 'Lease Amount' : 'Price';
   const priceValue = `${formatPrice(property.price)}${property.priceUnit || ''}`;
   const description = property.description?.slice(0, 150) || property.title;
-  const ogImage = images[0]?.url ? resolveImageUrl(images[0].url, 800) : DEFAULT_OG_IMAGE;
+  const ogImage = images[0]?.url ? absoluteImageUrl(resolveImageUrl(images[0].url, 1200)) : DEFAULT_OG_IMAGE;
 
   return (
     <div className="app-shell">

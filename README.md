@@ -65,7 +65,7 @@ Full details are in `backend/README.md`.
 - No customer login (as requested) — only Admin has a login.
 - Image upload: max 5 images per property, JPG/PNG/WEBP only (no video option), server-side auto-compress + fixed-size resize for a consistent, fast, responsive gallery.
 - Fully responsive: the customer app uses a centered "phone frame" (max-width 480px) that scales down to real mobile widths and up gracefully on desktop; the Admin Panel is a responsive sidebar dashboard (collapses to a hamburger menu on mobile).
-- SEO: per-page `<title>`/meta description/canonical URL/Open Graph tags via `react-helmet-async` (`frontend/src/utils/seo.js` builds these from the real browser URL, so they're correct on localhost, a Vercel preview, or your final domain with zero code changes), semantic headings, `alt` text on images, mobile-responsive meta viewport, `robots.txt`, and `sitemap.xml`. **Update the placeholder domain** (`https://pmv-properties.vercel.app`) in `frontend/public/robots.txt` and `frontend/public/sitemap.xml` once you know your real production URL — these two files can't detect it automatically the way the in-app tags do.
+- SEO: per-page `<title>`/meta description/canonical URL/Open Graph tags via `react-helmet-async` (`frontend/src/utils/seo.js` builds these from the fixed production domain `https://pmvproperty.in`), semantic headings, `alt` text on images, mobile-responsive meta viewport, `robots.txt`, and `sitemap.xml`. `robots.txt` and `sitemap.xml` also use `https://pmvproperty.in`; change it in `seo.js`, `index.html`, `robots.txt` and `sitemap.xml` if the domain ever changes.
 
 **My own additions/decisions you should know about**
 - **Logo & theme:** the full "PMV Properties" wordmark (transparent WebP: `src/assets/logo.webp` large, `logo-sm.webp` small) is used on Splash, Home header, and Admin Login/sidebar. The favicon / home-screen icons (`frontend/public/favicon-*.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`) use the compact "P house" mark instead — cropped tight and flattened onto a plain white background so it reads clearly at 16–32px; the earlier version of these files had a stray black background that showed as a black square favicon in some browsers. To change either logo again, replace those files at the same filenames. The whole app uses the logo's colours: **green** (`brand` in `tailwind.config.js`) for headers, main buttons, active states and prices; **red** (`accent`) for badges and the "Post Your Property" button.
@@ -78,3 +78,18 @@ Full details are in `backend/README.md`.
 
 **Scope note (please read)**
 This is a complete, working MVP you can run today and extend — not a pixel-for-pixel trace of all 36 mockup frames. The customer flow (all 6 categories × listing × details), the full CRUD Admin Panel, image handling, and the Call/WhatsApp-to-admin rule are all implemented end-to-end. Visual polish (micro-animations, exact spacing/icons per screen, category-specific filters beyond the ones included) is easy to refine from here — happy to keep iterating on any specific screen if you tell me which one to prioritize.
+
+## Fast first load on Render (no more ~1 minute wait)
+
+Render's free plan puts the API to sleep after ~15 minutes without visitors, and waking it takes about a minute. What the code now does about it:
+
+- **Backend** (`backend/server.js`): starts accepting requests immediately; MongoDB connects and the admin login syncs in the background. `/api/health` answers instantly. Once awake, the server pings its own public URL every 10 minutes so it stays awake (`KEEP_ALIVE=false` turns this off).
+- **Frontend** (`frontend/src/api.js`): wakes the API the moment the site opens, retries GET requests while the server is starting, shows a "server is starting" notice if a request is slow, and shows the last-seen listings instantly from the browser's saved copy while fresh data loads.
+
+**One-time setup you do outside the code (this is what stops the sleeping):**
+
+1. Create a free monitor at https://uptimerobot.com (or https://cron-job.org) that requests `https://<your-api>.onrender.com/api/health` **every 5 minutes**. This also wakes the server after a deploy or crash.
+2. In Render → your service → Settings, set **Health Check Path** to `/api/health`.
+3. Make sure `VITE_API_BASE_URL` is set on Vercel to `https://<your-api>.onrender.com/api`.
+
+For zero cold starts guaranteed, upgrade the Render service to a paid instance type — then none of the above is needed.

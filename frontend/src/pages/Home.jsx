@@ -9,7 +9,7 @@ import HeroSlider from '../components/HeroSlider.jsx';
 import PropertyCard from '../components/PropertyCard.jsx';
 import Loader from '../components/Loader.jsx';
 import { HeaderCall } from '../components/ContactButtons.jsx';
-import api from '../api.js';
+import { cachedGet } from '../api.js';
 import { canonicalUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
 import iconRent from '../assets/icons/icon-rent.png';
 import iconBuySale from '../assets/icons/icon-buy-sale.png';
@@ -36,11 +36,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .get('/properties/featured')
-      .then(({ data }) => setFeatured(data.properties))
-      .catch(() => setFeatured([]))
-      .finally(() => setLoading(false));
+    let off = false;
+    cachedGet('/properties/featured', {}, (data) => {
+      if (off) return;
+      setFeatured(data.properties);
+      setLoading(false);
+    }).catch(() => {
+      if (off) return;
+      setFeatured([]);
+      setLoading(false);
+    });
+    return () => {
+      off = true;
+    };
   }, []);
 
   const handleSearch = (e) => {

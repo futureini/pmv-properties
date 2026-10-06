@@ -7,7 +7,7 @@ import BottomNav from '../components/BottomNav.jsx';
 import PropertyCard from '../components/PropertyCard.jsx';
 import Loader from '../components/Loader.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-import api from '../api.js';
+import api, { cachedGet } from '../api.js';
 import { CATEGORIES } from '../utils/categories.js';
 import { canonicalUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
 
@@ -37,17 +37,21 @@ export default function AllProperties() {
     if (activeCategory) params.category = activeCategory;
     if (search) params.q = search;
 
-    api
-      .get('/properties', { params })
-      .then(({ data }) => {
-        setProperties(data.properties);
-        setTotal(data.total);
-      })
-      .catch(() => {
-        setProperties([]);
-        setTotal(0);
-      })
-      .finally(() => setLoading(false));
+    let off = false;
+    cachedGet('/properties', { params }, (data) => {
+      if (off) return;
+      setProperties(data.properties);
+      setTotal(data.total);
+      setLoading(false);
+    }).catch(() => {
+      if (off) return;
+      setProperties([]);
+      setTotal(0);
+      setLoading(false);
+    });
+    return () => {
+      off = true;
+    };
   }, [activeCategory, search]);
 
   const loadMore = () => {

@@ -7,7 +7,7 @@ import BottomNav from '../components/BottomNav.jsx';
 import PropertyCard from '../components/PropertyCard.jsx';
 import Loader from '../components/Loader.jsx';
 import EmptyState from '../components/EmptyState.jsx';
-import api from '../api.js';
+import { cachedGet } from '../api.js';
 import { CATEGORY_MAP } from '../utils/categories.js';
 import { canonicalUrl, DEFAULT_OG_IMAGE } from '../utils/seo.js';
 
@@ -39,11 +39,19 @@ export default function CategoryListing() {
     if (activeType) params.propertyType = activeType;
     if (search) params.q = search;
 
-    api
-      .get('/properties', { params })
-      .then(({ data }) => setProperties(data.properties))
-      .catch(() => setProperties([]))
-      .finally(() => setLoading(false));
+    let off = false;
+    cachedGet('/properties', { params }, (data) => {
+      if (off) return;
+      setProperties(data.properties);
+      setLoading(false);
+    }).catch(() => {
+      if (off) return;
+      setProperties([]);
+      setLoading(false);
+    });
+    return () => {
+      off = true;
+    };
   }, [slug, activeType, search]);
 
   if (!category) {

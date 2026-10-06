@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
 const ensureAdminSeeded = require('./utils/ensureAdmin');
@@ -50,8 +51,28 @@ app.use('/api', apiLimiter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- Routes ---
-app.get('/api/health', (req, res) => res.json({ status: 'ok', service: 'PMV Properties API' }));
-app.use('/api/auth', authRoutes);
+// Instant, no-database health check. Used by the frontend warm-up ping, the
+// Render "Health Check Path" setting and any uptime monitor.
+app.get('/api/health', (req, res) =>
+  res.json({
+    status: 'ok',
+    service: 'PMV Properties API',
+    db: mongoose.connection.readyState === 1 ? 'up' : 'connecting',
+  })
+);
+
+// Login must wait until MongoDB is connected AND the admin account has been
+// synced from .env (see `ready` below), so the first login after a boot works.
+// Public property routes do NOT wait — mongoose queues their queries until the
+// DB is up, which is what makes the first page load fast.
+app.use(
+  '/api/auth',
+  async (req, res, next) => {
+    await ready;
+    next();
+  },
+  authRoutes
+);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 
@@ -60,11 +81,30 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB, make sure the admin login from .env exists / is
-// up to date, THEN start accepting requests — so the very first login
-// attempt after a boot always works, on localhost and on a live server.
-(async () => {
+// Connect to MongoDB and sync the admin login in the BACKGROUND while the
+// server is already accepting requests. (Previously the server only started
+// listening after both finished, which added several seconds to every cold
+// start on Render's free plan.) `ready` resolves when both are done.
+const ready = (async () => {
   await connectDB();
   await ensureAdminSeeded();
-  app.listen(PORT, () => console.log(`PMV Properties API running on port ${PORT}`));
 })();
+
+// Render's free plan puts the service to sleep after ~15 minutes without
+// traffic, and waking it takes about a minute. Once awake, ping our own public
+// URL every 10 minutes so it doesn't fall asleep again. RENDER_EXTERNAL_URL is
+// set by Render automatically. Set KEEP_ALIVE=false to turn this off.
+// (This can't wake a sleeping server — pair it with an external monitor, see
+// README "Fast first load on Render".)
+function startKeepAlive() {
+  const url = (process.env.RENDER_EXTERNAL_URL || '').replace(/\/+$/, '');
+  if (!url || process.env.KEEP_ALIVE === 'false') return;
+  const ping = () => fetch(`${url}/api/health`).catch(() => {});
+  setInterval(ping, 10 * 60 * 1000);
+  console.log('[keep-alive] self-ping every 10 min enabled');
+}
+
+app.listen(PORT, () => {
+  console.log(`PMV Properties API running on port ${PORT}`);
+  startKeepAlive();
+});
